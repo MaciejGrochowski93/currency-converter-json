@@ -10,6 +10,7 @@ import org.springframework.web.client.RestTemplate;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.Arrays;
 import java.util.List;
 
 @Service
@@ -28,28 +29,23 @@ public class JsonParseService {
         return restTemplate.getForObject(URL, Money.class);
     }
 
-    public String calculateExchange(Currency sell, Currency buy) {
-        if (sell.equals(buy)) {
-            return "You cannot exchange a Currency with itself.";
-        } else {
-            String sellCurrency = chooseForeignCurrency(sell);
-            Money sellMoney = parse(sellCurrency);
-            List<Rates> bidRates = sellMoney.getRates();
-            BigDecimal bid = bidRates.get(0).getBid();
+    public String calculateForeignCurrencies(String sell, String buy) {
+        String sellCurrency = chooseForeignCurrency(sell);
+        Money sellMoney = parse(sellCurrency);
+        List<Rates> bidRates = sellMoney.getRates();
+        BigDecimal bid = bidRates.get(0).getBid();
 
-            String buyCurrency = chooseForeignCurrency(buy);
-            Money buyMoney = parse(buyCurrency);
-            List<Rates> askRates = buyMoney.getRates();
-            BigDecimal ask = askRates.get(0).getAsk();
+        String buyCurrency = chooseForeignCurrency(buy);
+        Money buyMoney = parse(buyCurrency);
+        List<Rates> askRates = buyMoney.getRates();
+        BigDecimal ask = askRates.get(0).getAsk();
 
-            BigDecimal exchangeResult = bid.divide(ask, 4, RoundingMode.HALF_UP).multiply(MARGIN_MULTIPLY);
-            return ("The exchange rate between " + sellMoney.getCode() + " and " + buyMoney.getCode() + " is: " + exchangeResult);
-        }
+        BigDecimal exchangeResult = bid.divide(ask, 4, RoundingMode.HALF_UP).multiply(MARGIN_MULTIPLY);
+        return ("The exchange rate between " + sellMoney.getCode() + " and " + buyMoney.getCode() + " is: " + exchangeResult);
     }
 
-    String chooseForeignCurrency(Currency currency) {
-        String currencyName = currency.toString();
-        switch (currencyName) {
+    private String chooseForeignCurrency(String currency) {
+        switch (currency) {
             case "EUR":
                 return EUR;
             case "CHF":
@@ -59,5 +55,11 @@ public class JsonParseService {
             default:
                 throw new IncorrectCurrency("Invalid currency.");
         }
+    }
+
+    public boolean areCurrenciesEnumMembers(String name, String name2, Class<Currency> currencyEnum) {
+        boolean b1 = Arrays.stream(currencyEnum.getEnumConstants()).anyMatch(currency -> currency.name().equals(name));
+        boolean b2 = Arrays.stream(currencyEnum.getEnumConstants()).anyMatch(currency -> currency.name().equals(name2));
+        return b1 && b2;
     }
 }
