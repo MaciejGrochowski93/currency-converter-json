@@ -4,7 +4,6 @@ import lombok.AllArgsConstructor;
 import maciej.grochowski.jsonapi.currency.CurrencyType;
 import maciej.grochowski.jsonapi.domain.Money;
 import maciej.grochowski.jsonapi.domain.Rates;
-import maciej.grochowski.jsonapi.exception.IncorrectCurrency;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -58,10 +57,8 @@ public class MoneyService {
                 return EUR;
             case "CHF":
                 return CHF;
-            case "GBP":
-                return GBP;
             default:
-                throw new IncorrectCurrency("Invalid foreign currency.");
+                return GBP;
         }
     }
 
