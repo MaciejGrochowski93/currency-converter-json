@@ -1,5 +1,5 @@
 package maciej.grochowski.jsonapi.currency;
 
-public enum Currency {
+public enum CurrencyType {
     PLN, EUR, CHF, GBP
 }
