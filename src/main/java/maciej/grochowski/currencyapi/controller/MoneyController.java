@@ -18,18 +18,18 @@ public class MoneyController {
     private final CalculationService calcService;
 
     @GetMapping("/{bid}/{amount}/{ask}")
-    public ResponseEntity<String> exchangeValues(@PathVariable CurrencyType bid, @PathVariable BigDecimal amount, @PathVariable CurrencyType ask) {
+    public ResponseEntity<String> exchangeValues(@PathVariable String bid, @PathVariable String amount, @PathVariable String ask) {
         if (calcService.isValidCurrency(ask, bid, CurrencyType.class) && calcService.isValidAmount(amount)) {
             if (ask.equals(bid)) {
                 return ResponseEntity.badRequest().body("You cannot exchange a Currency with itself.");
-            } else if (ask.toString().equals("PLN") || bid.toString().equals("PLN")) {
+            } else if (ask.equals("PLN") || bid.equals("PLN")) {
                 return ResponseEntity.ok(amount + " " + bid + " can be exchanged for " +
-                        calcService.customToForeignCurrency(bid, ask).multiply(amount) + " " + ask);
+                        calcService.customToForeignCurrency(bid, ask).multiply(BigDecimal.valueOf(Double.parseDouble(amount))) + " " + ask);
             }
             return ResponseEntity.ok(amount + " " + bid + " can be exchanged for " +
-                    calcService.foreignToForeignCurrency(bid, ask).multiply(amount) + " " + ask);
+                    calcService.foreignToForeignCurrency(bid, ask).multiply(BigDecimal.valueOf(Double.parseDouble(amount))) + " " + ask); // amount
         }
-        if (!calcService.isValidAmount(amount)) {
+        if (!calcService.isValidAmount((amount))) {
             return ResponseEntity.badRequest().body("Please, provide positive number with up to 2 decimal places.");
         }
         return ResponseEntity.badRequest().body("Please, provide correct currencies: "
