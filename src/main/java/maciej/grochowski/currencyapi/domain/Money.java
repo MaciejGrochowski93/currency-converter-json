@@ -1,4 +1,4 @@
-package maciej.grochowski.jsonapi.domain;
+package maciej.grochowski.currencyapi.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Getter;

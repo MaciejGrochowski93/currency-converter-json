@@ -1,12 +1,12 @@
-package maciej.grochowski.jsonapi;
+package maciej.grochowski.currencyapi;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class JsonApiApplication {
+public class CurrencyApiApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(JsonApiApplication.class, args);
+		SpringApplication.run(CurrencyApiApplication.class, args);
 	}
 }

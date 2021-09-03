@@ -1,4 +1,4 @@
-package maciej.grochowski.jsonapi.config;
+package maciej.grochowski.currencyapi.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
