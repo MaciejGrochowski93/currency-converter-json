@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.math.BigDecimal;
 
+import static maciej.grochowski.currencyapi.currency.CurrencyType.PLN;
+
 @RestController
 @AllArgsConstructor
 public class MoneyController {
@@ -18,13 +20,13 @@ public class MoneyController {
 
     @GetMapping("/{bid}/{amount}/{ask}")
     public ResponseEntity<String> exchangeValues(@PathVariable CurrencyType bid, @PathVariable BigDecimal amount, @PathVariable CurrencyType ask) {
-        if (calcService.isValidCurrency(ask, bid) && calcService.isValidAmount(amount)) {
-            if (ask.equals(bid)) {
-                return ResponseEntity.badRequest().body("You cannot exchange a Currency with itself.");
-            } else if (ask.name().equals("PLN") || bid.name().equals("PLN")) {
-                return ResponseEntity.ok(amount + " " + bid + " can be exchanged for " +
-                        calcService.customToForeignCurrency(bid, ask).multiply(amount) + " " + ask);
-            }
+        calcService.validateAmount(amount);
+        if (ask.equals(bid)) {
+            return ResponseEntity.badRequest().body("You cannot exchange a Currency with itself.");
+        }
+        if (ask == PLN || bid == PLN) {
+            return ResponseEntity.ok(amount + " " + bid + " can be exchanged for " +
+                    calcService.customToForeignCurrency(bid, ask).multiply(amount) + " " + ask);
         }
         return ResponseEntity.ok(amount + " " + bid + " can be exchanged for " +
                 calcService.foreignToForeignCurrency(bid, ask).multiply(amount) + " " + ask);

@@ -13,7 +13,7 @@ public enum CurrencyType {
     CHF("https://api.nbp.pl/api/exchangerates/rates/c/chf/?format=json"),
     GBP("https://api.nbp.pl/api/exchangerates/rates/c/gbp/?format=json");
 
-    String informationLink;
+    private String informationLink;
 
     @Override
     public String toString() {
