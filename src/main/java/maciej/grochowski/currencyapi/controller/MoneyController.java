@@ -25,9 +25,8 @@ public class MoneyController {
                 return ResponseEntity.ok(amount + " " + bid + " can be exchanged for " +
                         calcService.customToForeignCurrency(bid, ask).multiply(amount) + " " + ask);
             }
-            return ResponseEntity.ok(amount + " " + bid + " can be exchanged for " +
-                    calcService.foreignToForeignCurrency(bid, ask).multiply(amount) + " " + ask);
         }
-        return ResponseEntity.badRequest().body("fg");
+        return ResponseEntity.ok(amount + " " + bid + " can be exchanged for " +
+                calcService.foreignToForeignCurrency(bid, ask).multiply(amount) + " " + ask);
     }
 }
