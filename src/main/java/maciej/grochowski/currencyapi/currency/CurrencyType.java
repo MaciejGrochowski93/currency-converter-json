@@ -21,22 +21,6 @@ public enum CurrencyType {
         return List.of(CurrencyType.values());
     }
 
-//    private final static Map<String, CurrencyType> myMap;
-//
-//    static {
-//        myMap = Arrays.stream(values())
-//                .collect(Collectors.toMap(CurrencyType::name, Function.identity(), (currentOne, newOne) -> currentOne));
-//    }
-//
-//    @JsonCreator
-//    public static CurrencyType getCurrency(String name) {
-//        return Optional.ofNullable(myMap
-//                .get(name))
-//                .orElseThrow(CurrencyNotFound::new
-//                );
-//    }
-//    // mapa
-
     @Override
     public String toString() {
         return this.name();
