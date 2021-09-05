@@ -9,7 +9,7 @@ import org.springframework.web.client.RestTemplate;
 
 @Service
 @AllArgsConstructor
-public class RedirectionService {
+public class ParsingService {
 
     private final RestTemplate restTemplate;
 
@@ -18,8 +18,8 @@ public class RedirectionService {
     }
 
     public Rates getRateOutOfCurrency(CurrencyType providedCurrency) {
-        String currency = providedCurrency.getInformationLink();
-        Money money = parseToMoney(currency);
+        String currencyLink = providedCurrency.getInformationLink();
+        Money money = parseToMoney(currencyLink);
         return money.getRates().get(0);
     }
 }

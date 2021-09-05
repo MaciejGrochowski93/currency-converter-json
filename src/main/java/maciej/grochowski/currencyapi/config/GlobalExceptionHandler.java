@@ -10,36 +10,49 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import java.util.Arrays;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(GlobalExceptionHandler.class);
 
-    private static final String ENUM_CONVERSION_FAILED = "Please, provide correct currencies: "
-            + Arrays.toString(Arrays
-            .stream(CurrencyType.values())
-            .toArray());
+    private static final String ENUM_CONVERSION_FAILED_ERROR_MESSAGE = "Provided invalid currency: %s. \n" +
+            "Please, provide currency from the list: %s.";
+
+    @ExceptionHandler(ConversionFailedException.class)
+    public ResponseEntity<String> handleInvalidConversion(ConversionFailedException ex) {
+        LOGGER.warn(ex.getMessage(), ex);
+        if (Objects.equals(ex.getTargetType().getType(), CurrencyType.class)) {
+            return new ResponseEntity<>(resolveProvidedInvalidCurrencyErrorMessage(ex.getValue()), HttpStatus.BAD_REQUEST);
+        }
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
+    }
+
+    public String resolveProvidedInvalidCurrencyErrorMessage(Object object) {
+        String providedValue = Optional.ofNullable(object)
+                .map(Object::toString)
+                .orElse("null");
+        String availableCurrencies = CurrencyType.availableCurrencies().stream()
+                .map(CurrencyType::name)
+                .collect(Collectors.joining(", ", "[", "]"));
+        return String.format(ENUM_CONVERSION_FAILED_ERROR_MESSAGE, providedValue, availableCurrencies);
+    }
 
     private static final String AMOUNT_CONVERSION_FAILED =
             "Provided amount must be a positive number, lower than 10 mln, and with maximum of 2 decimal places.";
 
-    @ExceptionHandler(ConversionFailedException.class)
-    public ResponseEntity<String> handleEnumConflict(ConversionFailedException ex) {
-        LOGGER.warn(ex.getMessage());
-        return new ResponseEntity<>(ENUM_CONVERSION_FAILED, HttpStatus.BAD_REQUEST);
-    }
-
     @ExceptionHandler(NumberFormatException.class)
     public ResponseEntity<String> handleNumberConflict(NumberFormatException ex) {
-        LOGGER.warn(ex.getMessage());
+        LOGGER.warn(ex.getMessage(), ex);
         return new ResponseEntity<>(AMOUNT_CONVERSION_FAILED, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(IncorrectAmount.class)
     public ResponseEntity<String> handleAmountConflict(IncorrectAmount ex) {
-        LOGGER.warn(ex.getMessage());
+        LOGGER.warn(ex.getMessage(), ex);
         return new ResponseEntity<>(AMOUNT_CONVERSION_FAILED, HttpStatus.BAD_REQUEST);
     }
 }

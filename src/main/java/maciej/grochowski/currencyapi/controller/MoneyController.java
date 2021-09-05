@@ -25,10 +25,10 @@ public class MoneyController {
             return ResponseEntity.badRequest().body("You cannot exchange a Currency with itself.");
         }
         if (ask == PLN || bid == PLN) {
-            return ResponseEntity.ok(amount + " " + bid + " can be exchanged for " +
-                    calcService.customToForeignCurrency(bid, ask).multiply(amount) + " " + ask);
+            return ResponseEntity.ok(String.format("%.2f %s can be exchanged for %.2f %s.",
+                    amount, bid, calcService.customToForeignCurrency(bid, ask).multiply(amount), ask));
         }
-        return ResponseEntity.ok(amount + " " + bid + " can be exchanged for " +
-                calcService.foreignToForeignCurrency(bid, ask).multiply(amount) + " " + ask);
+        return ResponseEntity.ok(String.format("%.2f %s can be exchanges for %.2f %s.",
+                amount, bid, calcService.foreignToForeignCurrency(bid, ask).multiply(amount), ask));
     }
 }

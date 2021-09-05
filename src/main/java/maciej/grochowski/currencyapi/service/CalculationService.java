@@ -12,24 +12,24 @@ import java.math.RoundingMode;
 @AllArgsConstructor
 public class CalculationService {
 
-    private final RedirectionService redirectionService;
+    private final ParsingService parsingService;
     private final BigDecimal MARGIN_MULTIPLIER = BigDecimal.valueOf(1.02);
 
     public BigDecimal customToForeignCurrency(CurrencyType sellCurrency, CurrencyType buyCurrency) {
         if (sellCurrency == CurrencyType.PLN) {
-            BigDecimal askRate = redirectionService.getRateOutOfCurrency(buyCurrency).getAsk();
+            BigDecimal askRate = parsingService.getRateOutOfCurrency(buyCurrency).getAsk();
             return BigDecimal.ONE.divide((askRate.multiply(MARGIN_MULTIPLIER)), 4, RoundingMode.HALF_UP);
         } else {
-            BigDecimal bidRate = redirectionService.getRateOutOfCurrency(sellCurrency).getBid();
+            BigDecimal bidRate = parsingService.getRateOutOfCurrency(sellCurrency).getBid();
             return bidRate.divide(MARGIN_MULTIPLIER, 4, RoundingMode.HALF_UP);
         }
     }
 
     public BigDecimal foreignToForeignCurrency(CurrencyType sellCurrency, CurrencyType buyCurrency) {
-        BigDecimal bidRate = redirectionService.getRateOutOfCurrency(sellCurrency).getBid();
+        BigDecimal bidRate = parsingService.getRateOutOfCurrency(sellCurrency).getBid();
         BigDecimal bidPrice = bidRate.divide(MARGIN_MULTIPLIER, 4, RoundingMode.HALF_UP);
 
-        BigDecimal askRate = redirectionService.getRateOutOfCurrency(buyCurrency).getAsk();
+        BigDecimal askRate = parsingService.getRateOutOfCurrency(buyCurrency).getAsk();
         return bidPrice.divide((askRate.multiply(MARGIN_MULTIPLIER)), 4, RoundingMode.HALF_UP);
     }
 

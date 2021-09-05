@@ -4,6 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
@@ -14,6 +16,10 @@ public enum CurrencyType {
     GBP("https://api.nbp.pl/api/exchangerates/rates/c/gbp/?format=json");
 
     private String informationLink;
+
+    public static List<CurrencyType> availableCurrencies() {
+        return List.of(CurrencyType.values());
+    }
 
     @Override
     public String toString() {
