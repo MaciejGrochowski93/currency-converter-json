@@ -57,10 +57,10 @@ class CalculationServiceTest {
         Mockito.when(parsingService.getRateOutOfCurrency(CurrencyType.CHF)).thenReturn(Rates.builder().bid(BigDecimal.valueOf(4.00)).build());
         Mockito.when(parsingService.getRateOutOfCurrency(CurrencyType.EUR)).thenReturn(Rates.builder().ask(BigDecimal.valueOf(5.00)).build());
 
-        BigDecimal actualResult = calculationService.foreignToForeignCurrency(chf, eur);
+        BigDecimal actualResult = calculationService.foreignToForeignCurrency(chf, BigDecimal.TEN, eur);
 
         // THEN
-        assertEquals(BigDecimal.valueOf(0.7689), actualResult);
+        assertEquals(0, BigDecimal.valueOf(7.689).compareTo(actualResult));
     }
 
     @Test
@@ -72,9 +72,9 @@ class CalculationServiceTest {
         // WHEN
         Mockito.when(parsingService.getRateOutOfCurrency(CurrencyType.CHF)).thenReturn(Rates.builder().bid(BigDecimal.valueOf(4.00)).build());
 
-        BigDecimal actualResult = calculationService.customToForeignCurrency(chf, pln);
+        BigDecimal actualResult = calculationService.customToForeignCurrency(chf, BigDecimal.TEN, pln);
 
         // THEN
-        assertEquals(BigDecimal.valueOf(3.9216), actualResult);
+        assertEquals(0, BigDecimal.valueOf(39.216).compareTo(actualResult));
     }
 }
