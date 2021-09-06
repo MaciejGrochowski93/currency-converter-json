@@ -2,6 +2,7 @@ package maciej.grochowski.currencyapi.config;
 
 import maciej.grochowski.currencyapi.currency.CurrencyType;
 import maciej.grochowski.currencyapi.exception.IncorrectAmount;
+import maciej.grochowski.currencyapi.exception.SameCurrenciesException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.convert.ConversionFailedException;
@@ -39,6 +40,15 @@ public class GlobalExceptionHandler {
                 .map(CurrencyType::name)
                 .collect(Collectors.joining(", ", "[", "]"));
         return String.format(ENUM_CONVERSION_FAILED_ERROR_MESSAGE, providedValue, availableCurrencies);
+    }
+
+    private static final String SAME_CURRENCIES_CONVERSION_FAILED =
+            "You cannot exchange Currency with itself.";
+
+    @ExceptionHandler(SameCurrenciesException.class)
+    public ResponseEntity<String> handleSameCurrencies(SameCurrenciesException ex) {
+        LOGGER.warn(ex.getMessage(), ex);
+        return new ResponseEntity<>(SAME_CURRENCIES_CONVERSION_FAILED, HttpStatus.BAD_REQUEST);
     }
 
     private static final String AMOUNT_CONVERSION_FAILED =

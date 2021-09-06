@@ -7,9 +7,11 @@ import maciej.grochowski.currencyapi.domain.Rates;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import java.math.BigDecimal;
+
 @Service
 @AllArgsConstructor
-public class ParsingService {
+public class NBPService {
 
     private final RestTemplate restTemplate;
 
@@ -18,6 +20,10 @@ public class ParsingService {
     }
 
     public Rates getRateOutOfCurrency(CurrencyType providedCurrency) {
+        if (providedCurrency == CurrencyType.PLN) {
+            return new Rates(BigDecimal.ONE, BigDecimal.ONE);
+        }
+
         String currencyLink = providedCurrency.getInformationLink();
         Money money = parseToMoney(currencyLink);
         return money.getRates().get(0);

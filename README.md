@@ -12,12 +12,12 @@ retrieved from the National Polish Bank's site. Each operation of exchange is af
 
 
 ## Technologies
-The project uses RestTemplate to parse Json into an object. RestController allows to execute methods located in
-Services (mostly on BigDecimals).
+The project uses RestTemplate to parse JSON into an object. RestController allows to execute methods located in
+Services (mostly calculations on BigDecimals).
 
 
 ## Getting Started
-In order to try out this application you could use a platform for APIs like Postman, and make your own calls. 
+In order to try out this application you could use a platform for APIs - like Postman - and make your own calls. 
 For example: http://localhost:8080/exchange/PLN/1000/EUR - This case shows how many Euros you could buy for 1000 PLN.
 
 

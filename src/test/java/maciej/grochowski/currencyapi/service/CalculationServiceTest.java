@@ -22,7 +22,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class CalculationServiceTest {
 
     @Mock
-    private ParsingService parsingService;
+    private NBPService nbpService;
 
     @InjectMocks
     private CalculationService calculationService;
@@ -54,8 +54,8 @@ class CalculationServiceTest {
         CurrencyType eur = CurrencyType.EUR;
 
         // WHEN
-        Mockito.when(parsingService.getRateOutOfCurrency(CurrencyType.CHF)).thenReturn(Rates.builder().bid(BigDecimal.valueOf(4.00)).build());
-        Mockito.when(parsingService.getRateOutOfCurrency(CurrencyType.EUR)).thenReturn(Rates.builder().ask(BigDecimal.valueOf(5.00)).build());
+        Mockito.when(nbpService.getRateOutOfCurrency(CurrencyType.CHF)).thenReturn(Rates.builder().bid(BigDecimal.valueOf(4.00)).build());
+        Mockito.when(nbpService.getRateOutOfCurrency(CurrencyType.EUR)).thenReturn(Rates.builder().ask(BigDecimal.valueOf(5.00)).build());
 
         BigDecimal actualResult = calculationService.foreignToForeignCurrency(chf, BigDecimal.TEN, eur);
 
@@ -70,7 +70,7 @@ class CalculationServiceTest {
         CurrencyType pln = CurrencyType.PLN;
 
         // WHEN
-        Mockito.when(parsingService.getRateOutOfCurrency(CurrencyType.CHF)).thenReturn(Rates.builder().bid(BigDecimal.valueOf(4.00)).build());
+        Mockito.when(nbpService.getRateOutOfCurrency(CurrencyType.CHF)).thenReturn(Rates.builder().bid(BigDecimal.valueOf(4.00)).build());
 
         BigDecimal actualResult = calculationService.customToForeignCurrency(chf, BigDecimal.TEN, pln);
 
