@@ -20,7 +20,10 @@ public class CalculationService {
     private final BigDecimal MARGIN_MULTIPLIER = BigDecimal.valueOf(1.02);
 
     public Rates provideCalculationsAndMessage(CurrencyType sellCurrency, BigDecimal sellAmount, CurrencyType buyCurrency) {
-        BigDecimal buyAmount = BigDecimal.ONE;
+        validateAmount(sellAmount);
+        validateCurrencies(sellCurrency, buyCurrency);
+
+        BigDecimal buyAmount;
         if (sellCurrency == PLN || buyCurrency == PLN) {
             buyAmount = customToForeignCurrency(sellCurrency, sellAmount, buyCurrency);
         } else {
