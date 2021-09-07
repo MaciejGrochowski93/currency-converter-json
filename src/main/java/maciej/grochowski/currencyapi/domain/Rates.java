@@ -7,7 +7,6 @@ import java.math.BigDecimal;
 
 @JsonIgnoreProperties
 @Getter
-@Setter
 @Builder
 @ToString
 @AllArgsConstructor
@@ -17,22 +16,22 @@ public class Rates {
     public Rates(BigDecimal bid, BigDecimal ask) {
         this.bid = bid;
         this.ask = ask;
-        if (bid.equals(BigDecimal.ONE) || ask.equals(BigDecimal.ONE)) {
-            this.margin = BigDecimal.valueOf(1.02);
-        } else {
-            this.margin = BigDecimal.valueOf(1.0404);
-        }
+        initMargin();
     }
 
     public Rates(BigDecimal bid, BigDecimal ask, String message) {
         this.bid = bid;
         this.ask = ask;
+        initMargin();
+        this.message = message;
+    }
+
+    private void initMargin() {
         if (bid.equals(BigDecimal.ONE) || ask.equals(BigDecimal.ONE)) {
             this.margin = BigDecimal.valueOf(1.02);
         } else {
             this.margin = BigDecimal.valueOf(1.0404);
         }
-        this.message = message;
     }
 
     private BigDecimal bid;
